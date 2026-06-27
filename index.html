@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>阿联酋租金回报率计算器 · 迪拜 / 阿布扎比</title>
+  <meta name="description" content="迪拜 / 阿布扎比租金回报率计算器：毛回报、净回报、回本年限、按揭后现金回报率。William Xing 免费工具。" />
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --surface: #fff;
+      --text: #1c1917;
+      --muted: #78716c;
+      --border: #e7e5e4;
+      --accent: #b45309;
+      --accent-dark: #92400e;
+      --ok: #15803d;
+      --line: #f5f5f4;
+      --highlight: #fef3c7;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .site-brand-bar {
+      background: #050505;
+      color: #e8d5a3;
+      padding: .55rem 1.25rem;
+      border-bottom: 1px solid rgba(201, 162, 39, .2);
+    }
+    .site-brand-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .site-name {
+      font-weight: 700;
+      font-size: .88rem;
+      letter-spacing: .06em;
+      color: #f0c14b;
+      text-decoration: none;
+    }
+    .site-brand-meta { margin-left: auto; display: flex; align-items: center; gap: .65rem; }
+    .lang-switch {
+      display: inline-flex;
+      border: 1px solid rgba(232, 213, 163, .25);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .lang-btn {
+      padding: 3px 8px;
+      font-size: .68rem;
+      font-weight: 700;
+      background: transparent;
+      border: none;
+      color: rgba(232, 213, 163, .55);
+      cursor: pointer;
+    }
+    .lang-btn:hover { color: #fff; }
+    .lang-btn.active { background: rgba(201, 162, 39, .25); color: #f0c14b; }
+
+    .page { max-width: 1040px; margin: 0 auto; padding: 28px 20px 56px; }
+    header { margin-bottom: 24px; }
+    h1 { font-size: 1.55rem; font-weight: 700; color: #0c0a09; margin-bottom: 6px; }
+    .subtitle { font-size: .9rem; color: var(--muted); max-width: 44rem; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 820px) { .layout { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(28, 25, 23, .07);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: .95rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #44403c;
+    }
+
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block;
+      font-size: .84rem;
+      font-weight: 600;
+      color: #44403c;
+      margin-bottom: 6px;
+    }
+    .field .hint {
+      font-size: .74rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 4px;
+    }
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: .95rem;
+      background: #fff;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #d97706;
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, .12);
+    }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 640px) { .row2 { grid-template-columns: 1fr; } }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .86rem;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .toggle-row input { width: auto; accent-color: var(--accent); }
+
+    .adv-toggle {
+      background: none;
+      border: none;
+      color: var(--accent-dark);
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      margin: 4px 0 12px;
+      text-decoration: underline;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 480px) { .kpi-grid { grid-template-columns: 1fr; } }
+
+    .kpi {
+      background: var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+    }
+    .kpi.primary {
+      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      border-color: #fcd34d;
+    }
+    .kpi .label {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 4px;
+    }
+    .kpi .value {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--accent-dark);
+      font-variant-numeric: tabular-nums;
+    }
+    .kpi .value.ok { color: var(--ok); }
+
+    .breakdown {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .84rem;
+    }
+    .breakdown th,
+    .breakdown td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .breakdown th { color: var(--muted); font-weight: 600; font-size: .76rem; }
+    .breakdown td:last-child,
+    .breakdown th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .breakdown tr.total td {
+      font-weight: 700;
+      background: var(--highlight);
+      border-bottom: none;
+    }
+    .breakdown .neg { color: #b45309; }
+
+    .footnote {
+      font-size: .74rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-top: 8px;
+    }
+    .footnote a { color: var(--accent-dark); }
+  </style>
+</head>
+<body data-i18n-title="meta.title">
+
+<div class="site-brand-bar">
+  <div class="site-brand-inner">
+    <a href="https://sobhazanyan.github.io/william-xing-hub/" class="site-name" data-i18n="brand.name">WilliamXing</a>
+    <div class="site-brand-meta">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="lang-btn active" data-lang="zh">中</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  <header>
+    <h1 data-i18n="page.title">租金回报率计算器</h1>
+    <p class="subtitle" data-i18n="page.subtitle">估算毛回报率、净回报率、回本年限与（可选）按揭后现金回报率。迪拜 / 阿布扎比投资参考，不构成投资建议。</p>
+  </header>
+
+  <div class="layout">
+    <section class="card">
+      <h2 data-i18n="section.inputs">输入参数</h2>
+
+      <div class="field">
+        <label for="emirate" data-i18n="field.emirate">酋长国</label>
+        <select id="emirate">
+          <option value="dubai" data-i18n="option.emirate.dubai">迪拜 Dubai</option>
+          <option value="abudhabi" selected data-i18n="option.emirate.abudhabi">阿布扎比 Abu Dhabi</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="price" data-i18n="field.price">购房总价（AED）</label>
+        <input type="text" id="price" inputmode="numeric" value="2000000" />
+        <p class="hint" data-i18n-html="hint.priceCny">约 ¥ <span id="priceCny">—</span></p>
+      </div>
+
+      <div class="field">
+        <label for="rentMode" data-i18n="field.rentMode">租金输入方式</label>
+        <select id="rentMode">
+          <option value="monthly" selected data-i18n="option.rent.monthly">按月租</option>
+          <option value="annual" data-i18n="option.rent.annual">按年租</option>
+        </select>
+      </div>
+
+      <div class="field" id="rentMonthlyWrap">
+        <label for="monthlyRent" data-i18n="field.monthlyRent">月租（AED）</label>
+        <input type="text" id="monthlyRent" inputmode="numeric" value="10000" />
+      </div>
+
+      <div class="field" id="rentAnnualWrap" hidden>
+        <label for="annualRent" data-i18n="field.annualRent">年租（AED）</label>
+        <input type="text" id="annualRent" inputmode="numeric" value="120000" />
+      </div>
+
+      <div class="field">
+        <label for="serviceCharge" data-i18n="field.serviceCharge">年物业费 / Service Charge（AED）</label>
+        <input type="text" id="serviceCharge" inputmode="numeric" value="12000" />
+        <p class="hint" id="serviceHint"></p>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="vacancy" data-i18n="field.vacancy">空置率（%）</label>
+          <input type="text" id="vacancy" inputmode="decimal" value="5" />
+          <p class="hint" data-i18n="hint.vacancy">换租空窗、维修停租等，常见 0%–10%</p>
+        </div>
+        <div class="field">
+          <label for="mgmtFee" data-i18n="field.mgmtFee">托管 / 经纪费（占有效租金 %）</label>
+          <input type="text" id="mgmtFee" inputmode="decimal" value="5" />
+          <p class="hint" data-i18n="hint.mgmtFee">若自管可填 0；委托中介出租常见 5%</p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="maintenance" data-i18n="field.maintenance">维修预留（占有效租金 %）</label>
+        <input type="text" id="maintenance" inputmode="decimal" value="3" />
+      </div>
+
+      <div class="field">
+        <label for="fxRate" data-i18n="field.fxRate">AED → CNY 汇率</label>
+        <input type="text" id="fxRate" inputmode="decimal" value="1.95" />
+      </div>
+
+      <button type="button" class="adv-toggle" id="advToggle" data-i18n="toggle.advanced.closed">▸ 进阶：购价外成本 & 按揭</button>
+
+      <div id="advPanel" hidden>
+        <div class="field">
+          <label for="purchaseCosts" data-i18n="field.purchaseCosts">购房一次性成本（AED）</label>
+          <input type="text" id="purchaseCosts" inputmode="numeric" value="0" />
+          <p class="hint" data-i18n="hint.purchaseCosts">可选：登记费、经纪佣金等，用于「含购价全成本」净回报率</p>
+        </div>
+
+        <label class="toggle-row">
+          <input type="checkbox" id="useMortgage" />
+          <span data-i18n="toggle.mortgage">使用按揭（计算现金回报率）</span>
+        </label>
+
+        <div id="mortgagePanel" hidden>
+          <div class="row2">
+            <div class="field">
+              <label for="downPct" data-i18n="field.downPct">首付比例（%）</label>
+              <input type="text" id="downPct" inputmode="decimal" value="25" />
+            </div>
+            <div class="field">
+              <label for="interestRate" data-i18n="field.interestRate">年利率（%）</label>
+              <input type="text" id="interestRate" inputmode="decimal" value="4.5" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="loanYears" data-i18n="field.loanYears">贷款年限（年）</label>
+            <input type="text" id="loanYears" inputmode="numeric" value="25" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div>
+      <section class="card">
+        <h2 data-i18n="section.results">估算结果</h2>
+        <div class="kpi-grid">
+          <div class="kpi primary">
+            <div class="label" data-i18n="result.grossYield">毛回报率</div>
+            <div class="value" id="grossYield">—</div>
+          </div>
+          <div class="kpi primary">
+            <div class="label" data-i18n="result.netYield">净回报率（按房价）</div>
+            <div class="value ok" id="netYield">—</div>
+          </div>
+          <div class="kpi" id="netYieldTotalRow" hidden>
+            <div class="label" data-i18n="result.netYieldTotal">净回报率（含购价外成本）</div>
+            <div class="value ok" id="netYieldTotal">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label" data-i18n="result.payback">回本年限（净租金）</div>
+            <div class="value" id="payback">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label" data-i18n="result.monthlyNet">月均净租金收入</div>
+            <div class="value" id="monthlyNet">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label" data-i18n="result.annualNOI">年净运营收入 NOI</div>
+            <div class="value" id="annualNOI">—</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="section.breakdown">年度现金流拆解</h2>
+        <table class="breakdown">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>AED</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="row.grossRent">年毛租金</td>
+              <td id="bdGrossRent">—</td>
+            </tr>
+            <tr>
+              <td data-i18n="row.vacancyLoss">空置损失</td>
+              <td class="neg" id="bdVacancy">—</td>
+            </tr>
+            <tr>
+              <td data-i18n="row.effectiveRent">有效租金收入</td>
+              <td id="bdEffective">—</td>
+            </tr>
+            <tr>
+              <td data-i18n="row.serviceCharge">物业费</td>
+              <td class="neg" id="bdService">—</td>
+            </tr>
+            <tr>
+              <td data-i18n="row.mgmtFee">托管 / 经纪费</td>
+              <td class="neg" id="bdMgmt">—</td>
+            </tr>
+            <tr>
+              <td data-i18n="row.maintenance">维修预留</td>
+              <td class="neg" id="bdMaint">—</td>
+            </tr>
+            <tr class="total">
+              <td data-i18n="row.noi">净运营收入 NOI</td>
+              <td id="bdNoi">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" id="mortgageSection" hidden>
+        <h2 data-i18n="section.mortgage">按揭后现金回报</h2>
+        <div class="kpi-grid">
+          <div class="kpi primary">
+            <div class="label" data-i18n="result.cashOnCash">现金回报率（按揭后）</div>
+            <div class="value ok" id="cashOnCash">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label" data-i18n="result.monthlyCashFlow">月均净现金流（扣按揭）</div>
+            <div class="value" id="monthlyCashFlow">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label" data-i18n="result.annualDebt">年按揭还款</div>
+            <div class="value" id="annualDebt">—</div>
+          </div>
+        </div>
+      </section>
+
+      <p class="footnote">
+        <span data-i18n="footnote.disclaimer">免责声明：本工具基于常见假设估算，未含所得税、家具折旧、特殊社区费等；实际回报因项目、租约与市场周期而异，不构成投资建议。</span>
+        <span data-i18n-html="footnote.linkCost"> 配合 <a href="https://sobhazanyan.github.io/uae-buy-cost-calculator/" target="_blank" rel="noopener">买房成本计算器</a> 估算一次性购价外成本。</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/site-i18n-core.js"></script>
+<script src="scripts/i18n.js"></script>
+<script src="scripts/calc.js"></script>
+</body>
+</html>
