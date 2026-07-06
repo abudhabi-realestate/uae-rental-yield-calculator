@@ -54,7 +54,7 @@ SiteI18n.init({
     'badge.gross': '毛回报',
     'badge.net': '净回报',
     'footnote.disclaimer': '免责声明：本工具基于常见假设估算，未含所得税、家具折旧、特殊社区费等；实际回报因项目、租约与市场周期而异，不构成投资建议。',
-    'footnote.linkCost': '配合 <a href="https://sobhazanyan.github.io/uae-buy-cost-calculator/" target="_blank" rel="noopener">买房成本计算器</a> 估算一次性购价外成本。',
+    'footnote.linkCost': '配合 <a href="https://abudhabi-realestate.github.io/uae-buy-cost-calculator/" target="_blank" rel="noopener">买房成本计算器</a> 估算一次性购价外成本。',
   },
   en: {
     'meta.title': 'UAE Rental Yield Calculator · Dubai / Abu Dhabi',
@@ -111,6 +111,6 @@ SiteI18n.init({
     'badge.gross': 'Gross',
     'badge.net': 'Net',
     'footnote.disclaimer': 'Disclaimer: Estimates only; excludes income tax, furnishing depreciation, special levies, etc. Actual returns vary — not investment advice.',
-    'footnote.linkCost': 'Use the <a href="https://sobhazanyan.github.io/uae-buy-cost-calculator/" target="_blank" rel="noopener">Property Cost Calculator</a> for one-off purchase costs.',
+    'footnote.linkCost': 'Use the <a href="https://abudhabi-realestate.github.io/uae-buy-cost-calculator/" target="_blank" rel="noopener">Property Cost Calculator</a> for one-off purchase costs.',
   },
 });
